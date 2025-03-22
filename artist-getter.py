@@ -37,7 +37,22 @@ def search_for_items(token, q, type, market, limit, offset):
 
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)
-    if len(json_result) == 0:
+    if len(json_result["artists"]["items"]) == 0:
+        print("No more artists could be found. Try changing the parameters or executing a different API call.")
+        return None
+    
+    return json_result
+
+def get_artist_albums(token, id, include_groups, market, limit, offset):
+    endpoint_url = f"https://api.spotify.com/v1/artists/{id}/albums"
+    headers = get_auth_header(token)
+    query = f"?offset={offset}&limit={limit}&market={market}&locale=en-US,en;q%3D0.5&include_groups={include_groups}"
+    
+    query_url = endpoint_url + query
+
+    result = get(query_url, headers=headers)
+    json_result = json.loads(result.content)
+    if len(json_result["items"]) == 0:
         print("No more artists could be found. Try changing the parameters or executing a different API call.")
         return None
     
@@ -45,7 +60,10 @@ def search_for_items(token, q, type, market, limit, offset):
 
 token = get_token()
 
-result = search_for_items(token, "1900-2025", "artist", "LT", 50, 0)
+artists = search_for_items(token, "1900-2025", "artist", "LT", 50, 0)
 
-next_query_url = result["artists"]["next"]
-query_results = result["artists"]["items"]
+next_query_url = artists["artists"]["next"]
+extracted_artists = artists["artists"]["items"]
+
+extracted_albums = get_artist_albums(token, "5N0PoQbetugQlXM24VAJG4", "single,album,appears_on,compilation", "LT", 50, 0)
+print(extracted_albums["items"][0]["name"])
