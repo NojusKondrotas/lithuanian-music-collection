@@ -9,15 +9,26 @@ load_dotenv()
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 
-class artist:
+class Artist:
     def __init__(self, id, name, pfp_url):
         self.id = id
         self.name = name
         self.pfp_url = pfp_url
     
     def print(self):
-        print(f"id: {self.id} | name: {self.name} | pfp_url: {self.pfp_url}")
+        print(f"Artist\tid: {self.id} | name: {self.name} | pfp_url: {self.pfp_url}")
 
+class Album:
+    def __init__(self, id, name, type, total_tracks, image_url, external_url):
+        self.id = id
+        self.name = name
+        self.type = type
+        self.total_tracks = total_tracks
+        self.image_url = image_url
+        self.external_url = external_url
+    
+    def print(self):
+        print(f"Album\t\tid: {self.id} | name: {self.name} | type: {self.type} | total_tracks: {self.total_tracks} | image_url: {self.image_url} | external_url: {self.external_url}")
 
 def get_token():
     auth_string = client_id + ":" + client_secret
@@ -63,10 +74,16 @@ def get_artist_albums(token, id, include_groups, market, limit, offset):
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)
     if len(json_result["items"]) == 0:
-        print("No more artists could be found. Try changing the parameters or executing a different API call.")
+        print("No more albums could be found. Try changing the parameters or executing a different API call.")
         return None
     
     return json_result
+
+# def format_albums(artists):
+#     result = list()
+
+# def format(function, artists):
+#     return function(artists)
 
 token = get_token()
 
@@ -74,3 +91,4 @@ general_artists_return = search_for_items(token, "1900-2025", "artist", "LT", 50
 
 next_query_url = general_artists_return["artists"]["next"]
 extracted_artists = general_artists_return["artists"]["items"]
+
