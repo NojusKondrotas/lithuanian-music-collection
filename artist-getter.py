@@ -9,6 +9,16 @@ load_dotenv()
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 
+class artist:
+    def __init__(self, id, name, pfp_url):
+        self.id = id
+        self.name = name
+        self.pfp_url = pfp_url
+    
+    def print(self):
+        print(f"id: {self.id} | name: {self.name} | pfp_url: {self.pfp_url}")
+
+
 def get_token():
     auth_string = client_id + ":" + client_secret
     auth_bytes = auth_string.encode("utf-8")
@@ -60,10 +70,7 @@ def get_artist_albums(token, id, include_groups, market, limit, offset):
 
 token = get_token()
 
-artists = search_for_items(token, "1900-2025", "artist", "LT", 50, 0)
+general_artists_return = search_for_items(token, "1900-2025", "artist", "LT", 50, 0)
 
-next_query_url = artists["artists"]["next"]
-extracted_artists = artists["artists"]["items"]
-
-extracted_albums = get_artist_albums(token, "5N0PoQbetugQlXM24VAJG4", "single,album,appears_on,compilation", "LT", 50, 0)
-print(extracted_albums["items"][0]["name"])
+next_query_url = general_artists_return["artists"]["next"]
+extracted_artists = general_artists_return["artists"]["items"]
