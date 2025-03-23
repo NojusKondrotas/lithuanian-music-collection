@@ -115,6 +115,13 @@ def get_artist_albums(token, artist_id, include_groups, market, limit, offset):
 # def format(function, artists):
 #     return function(artists)
 
+def construct_artist_list(artists):
+    result_list = list()
+    for r in artists:
+        list.append(Artist(artists["id"], artists["name"], artists["followers"]["total"], artists["images"][0]["url"], artists["external_urls"]["spotify"]))
+
+    return result_list
+
 token = get_token()
 
 general_artists_return = search_for_items(token, "1900-2025", "artist", "LT", 50, 0)
