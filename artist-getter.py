@@ -10,13 +10,18 @@ client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 
 class Artist:
-    def __init__(self, id, name, pfp_url):
+    def __init__(self, id, name, total_followers, pfp_url, external_url):
         self.id = id
         self.name = name
+        self.total_followers = total_followers
         self.pfp_url = pfp_url
+        self.external_url = external_url
     
     def __str__(self):
-        print(f"Artist\tid: {self.id} | name: {self.name} | pfp_url: {self.pfp_url}")
+        print(f"Artist\tid: {self.id} | name: {self.name} | total_followers: {self.total_followers} | pfp_url: {self.pfp_url} | external_url: {self.external_url}")
+
+    def __repr__(self):
+        return self.__str__()
 
 class Album:
     def __init__(self, id, name, type, total_tracks, image_url, external_url):
