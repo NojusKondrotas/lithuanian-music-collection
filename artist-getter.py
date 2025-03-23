@@ -79,8 +79,9 @@ def get_artist_albums(token, id, include_groups, market, limit, offset):
     
     return json_result
 
-# def format_albums(artists):
+# def format_albums(albums):
 #     result = list()
+    
 
 # def format(function, artists):
 #     return function(artists)
@@ -92,3 +93,4 @@ general_artists_return = search_for_items(token, "1900-2025", "artist", "LT", 50
 next_query_url = general_artists_return["artists"]["next"]
 extracted_artists = general_artists_return["artists"]["items"]
 
+artists_discographies = extract_albums(token, extracted_artists, "album,single,appears_on,compilation", "LT", 50, 0)
