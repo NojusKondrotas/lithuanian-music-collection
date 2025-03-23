@@ -33,6 +33,22 @@ class Album:
     def __repr__(self):
         return self.__str__()
 
+class Song:
+    def __init__(self, artist, id, name, duration_ms, track_number, external_url):
+        self.artist = artist
+        self.id = id
+        self.name = name
+        self.duration_ms = duration_ms
+        self.track_number = track_number
+        self.external_url = external_url
+    
+    def __str__(self):
+        return f"Song\t\t\tid: {self.id} | name: {self.name} | artist: {self.artist} | duration: {self.duration_ms} | track_number: {self.track_number} | external_url: {self.external_url}"
+    
+    def __repr__(self):
+        return self.__str__()
+        
+
 def get_token():
     auth_string = client_id + ":" + client_secret
     auth_bytes = auth_string.encode("utf-8")
