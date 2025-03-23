@@ -15,7 +15,7 @@ class Artist:
         self.name = name
         self.pfp_url = pfp_url
     
-    def print(self):
+    def __str__(self):
         print(f"Artist\tid: {self.id} | name: {self.name} | pfp_url: {self.pfp_url}")
 
 class Album:
@@ -27,8 +27,11 @@ class Album:
         self.image_url = image_url
         self.external_url = external_url
     
-    def print(self):
-        print(f"Album\t\tid: {self.id} | name: {self.name} | type: {self.type} | total_tracks: {self.total_tracks} | image_url: {self.image_url} | external_url: {self.external_url}")
+    def __str__(self):
+        return f"Album\t\tid: {self.id} | name: {self.name} | type: {self.type} | total_tracks: {self.total_tracks} | image_url: {self.image_url} | external_url: {self.external_url}"
+    
+    def __repr__(self):
+        return self.__str__()
 
 def get_token():
     auth_string = client_id + ":" + client_secret
@@ -64,8 +67,8 @@ def search_for_items(token, q, type, market, limit, offset):
     
     return json_result
 
-def get_artist_albums(token, id, include_groups, market, limit, offset):
-    endpoint_url = f"https://api.spotify.com/v1/artists/{id}/albums"
+def get_artist_albums(token, artist_id, include_groups, market, limit, offset):
+    endpoint_url = f"https://api.spotify.com/v1/artists/{artist_id}/albums"
     headers = get_auth_header(token)
     query = f"?offset={offset}&limit={limit}&market={market}&locale=en-US,en;q%3D0.5&include_groups={include_groups}"
     
@@ -77,7 +80,12 @@ def get_artist_albums(token, id, include_groups, market, limit, offset):
         print("No more albums could be found. Try changing the parameters or executing a different API call.")
         return None
     
-    return json_result
+    result_list = list()
+
+    for r in json_result["items"]:
+        result_list.append(Album(r["id"], r["name"], r["album_group"], r["total_tracks"], r["images"][0]["url"], r["external_urls"]["spotify"]))
+    
+    return result_list
 
 # def format_albums(albums):
 #     result = list()
@@ -93,4 +101,6 @@ general_artists_return = search_for_items(token, "1900-2025", "artist", "LT", 50
 next_query_url = general_artists_return["artists"]["next"]
 extracted_artists = general_artists_return["artists"]["items"]
 
-artists_discographies = extract_albums(token, extracted_artists, "album,single,appears_on,compilation", "LT", 50, 0)
+artist_discography = get_artist_albums(token, "5N0PoQbetugQlXM24VAJG4", "album,single,appears_on,compilation", "LT", 50, 0)
+for r in artist_discography:
+    print(r)
